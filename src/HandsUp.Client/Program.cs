@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Blazor.Hosting;
 
-namespace HandsUp
+namespace HandsUp.Client
 {
     public class Program
     {

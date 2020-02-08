@@ -1,0 +1,62 @@
+﻿@page "/events"
+
+<h3>Events</h3>
+
+<MatButton Raised="true" OnClick="OpenDialog">Create Event</MatButton>
+
+<MatList>
+    @foreach (var eventItem in EventList)
+    {
+        <MatListItem>
+            @eventItem.ID
+        </MatListItem>
+    }
+</MatList>
+
+<MatDialog @bind-IsOpen="@dialogIsOpen">
+    <MatDialogTitle>Create Event</MatDialogTitle>
+    <MatDialogContent>
+        <p>Name of event?</p>
+        <MatTextField @bind-Value="@newEventName"/>
+    </MatDialogContent>
+    <MatDialogContent>
+        <p>Date of event?</p>
+        <MatDatePicker @bind-Value="@newEventDate"/>
+    </MatDialogContent>
+
+    <MatDialogActions>
+        <MatButton OnClick="@(e => { dialogIsOpen = false; })">Cancel</MatButton>
+        <MatButton OnClick="@CreateEvent">OK</MatButton>
+    </MatDialogActions>
+</MatDialog>
+
+@code {
+    public IList<Event> EventList { get; set; }
+
+    int counter = 0;
+
+    bool dialogIsOpen = false;
+
+    public string newEventName;
+    public DateTime? newEventDate;
+    public string newEventLocation;
+
+    protected async override Task OnInitializedAsync()
+    {
+        EventList = new List<Event>();
+    }
+
+    private void OpenDialog()
+    {
+        newEventName = null;
+        newEventDate = null;
+        dialogIsOpen = true;
+    }
+
+    private void CreateEvent()
+    {
+        EventList.Add(new Event { Name = "Test", ID = counter++ });
+
+        dialogIsOpen = false;
+    }
+}

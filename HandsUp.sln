@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandsUp", "src\HandsUp.Client\HandsUp.csproj", "{A3E59427-AFA5-4EB0-9BCA-B2B8DFCC5929}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HandsUp.Client", "src\HandsUp.Client\HandsUp.Client.csproj", "{A3E59427-AFA5-4EB0-9BCA-B2B8DFCC5929}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HandsUp.Server", "src\HandsUp.Server\HandsUp.Server.csproj", "{6C9CFFA0-6379-4820-A4E3-6BEBCE285929}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HandsUp.Shared", "src\HandsUp.Shared\HandsUp.Shared.csproj", "{56EB397A-EF03-4D8F-B6C6-E6845898ACD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{A3E59427-AFA5-4EB0-9BCA-B2B8DFCC5929}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3E59427-AFA5-4EB0-9BCA-B2B8DFCC5929}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3E59427-AFA5-4EB0-9BCA-B2B8DFCC5929}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C9CFFA0-6379-4820-A4E3-6BEBCE285929}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C9CFFA0-6379-4820-A4E3-6BEBCE285929}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C9CFFA0-6379-4820-A4E3-6BEBCE285929}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C9CFFA0-6379-4820-A4E3-6BEBCE285929}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56EB397A-EF03-4D8F-B6C6-E6845898ACD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56EB397A-EF03-4D8F-B6C6-E6845898ACD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56EB397A-EF03-4D8F-B6C6-E6845898ACD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56EB397A-EF03-4D8F-B6C6-E6845898ACD0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

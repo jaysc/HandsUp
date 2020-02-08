@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace HandsUp
+namespace HandsUp.Client
 {
     public class Startup
     {
