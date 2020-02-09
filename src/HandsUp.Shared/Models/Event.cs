@@ -19,6 +19,6 @@ namespace HandsUp.Shared.Models
         public DateTime? Date { get; set; }
         public bool Finished { get; set; }
 
-        public List<Person> People { get; set; }
+        public ICollection<Person> People { get; set; }
     }
 }
