@@ -4,42 +4,57 @@
 
 <MatButton Raised="true" OnClick="OpenDialog">Create Event</MatButton>
 
-<MatList>
+<MatAccordion>
     @foreach (var eventItem in EventList)
     {
-        <MatListItem>
-            @eventItem.ID
-        </MatListItem>
+        <MatExpansionPanel>
+            <MatExpansionPanelSummary>
+                <MatExpansionPanelHeader>@eventItem.Name</MatExpansionPanelHeader>
+            </MatExpansionPanelSummary>
+            <MatExpansionPanelDetails>
+                <MatSubtitle2>At @eventItem.Location on @eventItem.Date</MatSubtitle2>
+            </MatExpansionPanelDetails>
+        </MatExpansionPanel>
     }
-</MatList>
+</MatAccordion>
 
-<MatDialog @bind-IsOpen="@dialogIsOpen">
-    <MatDialogTitle>Create Event</MatDialogTitle>
-    <MatDialogContent>
-        <p>Name of event?</p>
-        <MatTextField @bind-Value="@newEventName"/>
-    </MatDialogContent>
-    <MatDialogContent>
-        <p>Date of event?</p>
-        <MatDatePicker @bind-Value="@newEventDate"/>
-    </MatDialogContent>
+<MatDialog @bind-IsOpen="dialogIsOpen">
+    <EditForm Model="newEvent" OnValidSubmit="CreateEvent">
+        <DataAnnotationsValidator />
+        <MatDialogTitle>Create Event</MatDialogTitle>
+        <MatDialogContent>
+            <p>Name of event?</p>
+            <MatTextField @bind-Value="newEvent.Name" Label="Name" />
+            <ValidationMessage For="@(() => newEvent.Name)" />
+        </MatDialogContent>
+        <MatDialogContent>
+            <p>Location of event?</p>
+            <MatTextField @bind-Value="newEvent.Location" Label="Location" />
+            <ValidationMessage For="@(() => newEvent.Location)" />
+        </MatDialogContent>
+        <MatDialogContent>
+            <p>Date of event?</p>
+            <MatDatePicker @bind-Value="newEvent.Date" EnableTime="true" Enable24hours="true" Label="Date and time" Minimum="DateTime.Now" />
+        </MatDialogContent>
 
-    <MatDialogActions>
-        <MatButton OnClick="@(e => { dialogIsOpen = false; })">Cancel</MatButton>
-        <MatButton OnClick="@CreateEvent">OK</MatButton>
-    </MatDialogActions>
+        <MatDialogContent>
+            <p>Description?</p>
+            <MatTextField @bind-Value="newEvent.Description" HelperText="Optional" HelperTextPersistent="true" Label="Description" TextArea="true" FullWidth="true" />
+        </MatDialogContent>
+
+        <MatDialogActions>
+            <MatButton OnClick="@(e => { dialogIsOpen = false; })">Cancel</MatButton>
+            <MatButton Type="submit" Raised="true">Create Event</MatButton>
+        </MatDialogActions>
+    </EditForm>
 </MatDialog>
 
 @code {
     public IList<Event> EventList { get; set; }
 
-    int counter = 0;
-
     bool dialogIsOpen = false;
 
-    public string newEventName;
-    public DateTime? newEventDate;
-    public string newEventLocation;
+    private Event newEvent = new Event();
 
     protected async override Task OnInitializedAsync()
     {
@@ -48,14 +63,13 @@
 
     private void OpenDialog()
     {
-        newEventName = null;
-        newEventDate = null;
+        newEvent = new Event();
         dialogIsOpen = true;
     }
 
     private void CreateEvent()
     {
-        EventList.Add(new Event { Name = "Test", ID = counter++ });
+        EventList.Add(newEvent);
 
         dialogIsOpen = false;
     }
