@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HandsUp.Shared.Models
 {
     public class Person
     {
-        public int ID { get; set; }
+        [Column("Id")]
+        public int PersonId { get; set; }
+
         public string Name { get; set; }
     }
 }

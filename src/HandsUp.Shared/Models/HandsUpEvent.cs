@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HandsUp.Shared.Models
 {
-    public class Event
+    public class HandsUpEvent
     {
-        public int ID { get; set; }
-        
+        [Column("Id")]
+        [Required]
+        public int HandsUpEventId { get; set; }
+
         [Required]
         public string Name { get; set; }
 
@@ -16,9 +19,11 @@ namespace HandsUp.Shared.Models
 
         public string Description { get; set; }
 
+        public DateTime? CreatedDate { get; set; }
         public DateTime? Date { get; set; }
-        public bool Finished { get; set; }
+        public DateTime? FinishedDate { get; set; }
 
         public ICollection<Person> People { get; set; }
+        public Person CreatedByPerson { get; set; }
     }
 }

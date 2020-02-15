@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using HandsUp.Server.BusinessLayer;
 
 namespace HandsUp.Server
 {
@@ -25,6 +26,7 @@ namespace HandsUp.Server
             services.AddMvc();
 
             services.AddDbContext<HandsUpContext>(options => options.UseSqlite("Data Source=handsUp.db"));
+            services.RegisterBusinessLayer();
 
             services.AddResponseCompression(options =>
             {

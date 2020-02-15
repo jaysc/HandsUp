@@ -1,45 +1,50 @@
 ﻿@page "/events"
+@inject HttpClient Http
 
 <h3>Events</h3>
 
 <MatButton Raised="true" OnClick="OpenDialog">Create Event</MatButton>
 
-<MatAccordion>
-    @foreach (var eventItem in EventList)
-    {
-        <MatExpansionPanel>
-            <MatExpansionPanelSummary>
-                <MatExpansionPanelHeader>@eventItem.Name</MatExpansionPanelHeader>
-            </MatExpansionPanelSummary>
-            <MatExpansionPanelDetails>
-                <MatSubtitle2>At @eventItem.Location on @eventItem.Date</MatSubtitle2>
-            </MatExpansionPanelDetails>
-        </MatExpansionPanel>
-    }
-</MatAccordion>
+@if (HandsUpEventList == null)
+{
+    <h3 class="mat-subtitle1">Loading</h3>
+    <MatProgressBar Indeterminate="true"></MatProgressBar>
+}
+else
+{
+    <MatAccordion>
+        @foreach (var eventItem in HandsUpEventList)
+        {
+            <MatExpansionPanel>
+                <MatExpansionPanelSummary>
+                    <MatExpansionPanelHeader>@eventItem.Name</MatExpansionPanelHeader>
+                </MatExpansionPanelSummary>
+                <MatExpansionPanelDetails>
+                    <MatSubtitle2>At @eventItem.Location on @eventItem.CreatedDate</MatSubtitle2>
+                </MatExpansionPanelDetails>
+            </MatExpansionPanel>
+        }
+    </MatAccordion>
+}
 
 <MatDialog @bind-IsOpen="dialogIsOpen">
-    <EditForm Model="newEvent" OnValidSubmit="CreateEvent">
+    <EditForm Model="newHandsUpEvent" OnValidSubmit="SaveEvent">
         <DataAnnotationsValidator />
         <MatDialogTitle>Create Event</MatDialogTitle>
         <MatDialogContent>
-            <p>Name of event?</p>
-            <MatTextField @bind-Value="newEvent.Name" Label="Name" />
-            <ValidationMessage For="@(() => newEvent.Name)" />
+            <MatTextField @bind-Value="newHandsUpEvent.Name" Label="Name" />
+            <ValidationMessage For="@(() => newHandsUpEvent.Name)" />
         </MatDialogContent>
         <MatDialogContent>
-            <p>Location of event?</p>
-            <MatTextField @bind-Value="newEvent.Location" Label="Location" />
-            <ValidationMessage For="@(() => newEvent.Location)" />
+            <MatTextField @bind-Value="newHandsUpEvent.Location" Label="Location" />
+            <ValidationMessage For="@(() => newHandsUpEvent.Location)" />
         </MatDialogContent>
         <MatDialogContent>
-            <p>Date of event?</p>
-            <MatDatePicker @bind-Value="newEvent.Date" EnableTime="true" Enable24hours="true" Label="Date and time" Minimum="DateTime.Now" />
+            <MatDatePicker @bind-Value="newHandsUpEvent.CreatedDate" EnableTime="true" Enable24hours="true" Label="Date and time" Minimum="DateTime.Now" />
         </MatDialogContent>
 
         <MatDialogContent>
-            <p>Description?</p>
-            <MatTextField @bind-Value="newEvent.Description" HelperText="Optional" HelperTextPersistent="true" Label="Description" TextArea="true" FullWidth="true" />
+            <MatTextField @bind-Value="newHandsUpEvent.Description" HelperText="Optional" HelperTextPersistent="true" Label="Description" TextArea="true" FullWidth="true" />
         </MatDialogContent>
 
         <MatDialogActions>
@@ -50,26 +55,26 @@
 </MatDialog>
 
 @code {
-    public IList<Event> EventList { get; set; }
+    public IList<HandsUpEvent> HandsUpEventList { get; set; }
 
     bool dialogIsOpen = false;
 
-    private Event newEvent = new Event();
+    private HandsUpEvent newHandsUpEvent = new HandsUpEvent();
 
     protected async override Task OnInitializedAsync()
     {
-        EventList = new List<Event>();
+        HandsUpEventList = await Http.GetJsonAsync<List<HandsUpEvent>>("events");
     }
 
     private void OpenDialog()
     {
-        newEvent = new Event();
+        newHandsUpEvent = new HandsUpEvent();
         dialogIsOpen = true;
     }
 
-    private void CreateEvent()
+    private void SaveEvent()
     {
-        EventList.Add(newEvent);
+        Http.PostJsonAsync("event", newHandsUpEvent);
 
         dialogIsOpen = false;
     }

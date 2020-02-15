@@ -10,12 +10,12 @@ namespace HandsUp.Server
 
         }
 
-        public DbSet<Event> Events { get; set; }
+        public DbSet<HandsUpEvent> HandsUpEvents { get; set; }
         public DbSet<Person> People { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            modelBuilder.Entity<HandsUpEvent>().ToTable("HandsUpEvent");
         }
     }
 }
