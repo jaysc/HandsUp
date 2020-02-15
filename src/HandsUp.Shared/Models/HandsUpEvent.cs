@@ -21,7 +21,10 @@ namespace HandsUp.Shared.Models
 
         public DateTime? CreatedDate { get; set; }
         public DateTime? Date { get; set; }
+
+        //When set, remove from list
         public DateTime? FinishedDate { get; set; }
+        public bool Deleted { get; set; }
 
         public ICollection<Person> People { get; set; }
         public Person CreatedByPerson { get; set; }

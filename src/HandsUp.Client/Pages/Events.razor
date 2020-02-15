@@ -4,6 +4,7 @@
 <h3>Events</h3>
 
 <MatButton Raised="true" OnClick="OpenDialog">Create Event</MatButton>
+<MatButton Raised="true" OnClick="Refesh">Refresh</MatButton>
 
 @if (HandsUpEventList == null)
 {
@@ -15,14 +16,15 @@ else
     <MatAccordion>
         @foreach (var eventItem in HandsUpEventList)
         {
-            <MatExpansionPanel>
-                <MatExpansionPanelSummary>
-                    <MatExpansionPanelHeader>@eventItem.Name</MatExpansionPanelHeader>
-                </MatExpansionPanelSummary>
-                <MatExpansionPanelDetails>
-                    <MatSubtitle2>At @eventItem.Location on @eventItem.CreatedDate</MatSubtitle2>
-                </MatExpansionPanelDetails>
-            </MatExpansionPanel>
+        <MatExpansionPanel>
+            <MatButton Raised="true" OnClick="@(() => RemoveEvent(eventItem))">Remove Event</MatButton>
+            <MatExpansionPanelSummary>
+                <MatExpansionPanelHeader>@eventItem.Name</MatExpansionPanelHeader>
+            </MatExpansionPanelSummary>
+            <MatExpansionPanelDetails>
+                <MatSubtitle2>At @eventItem.Location on @eventItem.CreatedDate</MatSubtitle2>
+            </MatExpansionPanelDetails>
+        </MatExpansionPanel>
         }
     </MatAccordion>
 }
@@ -40,7 +42,7 @@ else
             <ValidationMessage For="@(() => newHandsUpEvent.Location)" />
         </MatDialogContent>
         <MatDialogContent>
-            <MatDatePicker @bind-Value="newHandsUpEvent.CreatedDate" EnableTime="true" Enable24hours="true" Label="Date and time" Minimum="DateTime.Now" />
+            <MatDatePicker @bind-Value="newHandsUpEvent.Date" EnableTime="true" Enable24hours="true" Label="Date and time" Minimum="DateTime.Now" />
         </MatDialogContent>
 
         <MatDialogContent>
@@ -63,7 +65,7 @@ else
 
     protected async override Task OnInitializedAsync()
     {
-        HandsUpEventList = await Http.GetJsonAsync<List<HandsUpEvent>>("events");
+        Refesh();
     }
 
     private void OpenDialog()
@@ -72,10 +74,28 @@ else
         dialogIsOpen = true;
     }
 
-    private void SaveEvent()
+    private async void Refesh()
     {
-        Http.PostJsonAsync("event", newHandsUpEvent);
+        HandsUpEventList = null;
 
+        HandsUpEventList = await Http.GetJsonAsync<List<HandsUpEvent>>("events").ConfigureAwait(false);
+
+        StateHasChanged();
+    }
+
+    private async void SaveEvent()
+    {
         dialogIsOpen = false;
+
+        await Http.PostJsonAsync("events/create", newHandsUpEvent).ConfigureAwait(false);
+
+        Refesh();
+    }
+
+    private async void RemoveEvent(HandsUpEvent handsUpEvent)
+    {
+        await Http.GetAsync($"events/remove/{handsUpEvent.HandsUpEventId}").ConfigureAwait(false);
+
+        Refesh();
     }
 }

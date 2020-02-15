@@ -7,6 +7,7 @@ using HandsUp.Server.BusinessLayer;
 
 namespace HandsUp.Server.Controllers
 {
+    [Route("events")]
     [ApiController]
     public class HandsUpEventController : ControllerBase
     {
@@ -16,7 +17,6 @@ namespace HandsUp.Server.Controllers
             _handsUpEventServiceManager = handsUpEventServiceManager ?? throw new ArgumentNullException(nameof(handsUpEventServiceManager));
         }
 
-        [Route("events")]
         [HttpGet]
         public async Task<ActionResult<List<HandsUpEvent>>> GetEvents()
         {
@@ -24,15 +24,23 @@ namespace HandsUp.Server.Controllers
         }
 
 
-        [Route("event")]
+        [Route("create")]
         [HttpPost]
         public async Task<ActionResult<HandsUpEvent>> CreateEvent([FromBody] HandsUpEvent handsUpEvent)
         {
             handsUpEvent.CreatedDate = DateTime.UtcNow;
 
-            return handsUpEvent;
+            return await _handsUpEventServiceManager.CreateEvent(handsUpEvent).ConfigureAwait(false);
+        }
 
-            return await _handsUpEventServiceManager.CreateEvent(handsUpEvent);
+        [Route("remove/{eventId}")]
+        [HttpGet]
+        public async Task<ActionResult> RemoveEvent(int eventId)
+        {
+            //todo return error if it can't find the row
+            var result = await _handsUpEventServiceManager.RemoveEvent(eventId).ConfigureAwait(false);
+
+            return new OkObjectResult(result);
         }
     }
 }
