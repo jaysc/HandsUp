@@ -1,7 +1,43 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="main">
-    <div class="content px-4">
-        @Body
-    </div>
-</div>
+<MatAppBarContainer>
+    <MatAppBar Fixed="true">
+        <MatAppBarRow>
+            <MatAppBarSection>
+                <!--<MatIconButton Icon="menu" OnClick="ButtonClicked"></MatIconButton>-->
+
+                <MatAppBarTitle>HandsUp 🙌</MatAppBarTitle>
+            </MatAppBarSection>
+            <MatAppBarSection Align="@MatAppBarSectionAlign.End">
+                Username goes here
+                <MatIconButton Icon="person" />
+            </MatAppBarSection>
+        </MatAppBarRow>
+    </MatAppBar>
+
+    <MatAppBarContent>
+        <MatDrawerContainer Style="width: 100vw; height: 100vh;">
+            <MatDrawer @bind-Opened="@Opened">
+                Drawer Content
+            </MatDrawer>
+            <MatDrawerContent>
+                <div class="content px-4">
+                    @Body
+                </div>
+            </MatDrawerContent>
+        </MatDrawerContainer>
+    </MatAppBarContent>
+</MatAppBarContainer>
+
+@code
+{
+    bool Opened = false;
+
+    void ButtonClicked()
+    {
+        todo uncomment once more pages are added
+
+        Opened = !Opened;
+    }
+
+}
