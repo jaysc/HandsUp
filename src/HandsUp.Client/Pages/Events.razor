@@ -1,10 +1,7 @@
-﻿@page "/events"
+﻿@page "/"
 @inject HttpClient Http
 
-<h3>Events</h3>
-
-<MatButton Raised="true" OnClick="OpenDialog">Create Event</MatButton>
-<MatButton Raised="true" OnClick="Refesh">Refresh</MatButton>
+<h3>Hands Up 🙌</h3>
 
 @if (HandsUpEventList == null)
 {
@@ -13,18 +10,20 @@
 }
 else
 {
+    <MatButton Raised="true" OnClick="OpenDialog">Create Event</MatButton>
+    <MatButton Raised="true" OnClick="Refesh">Refresh</MatButton>
     <MatAccordion>
         @foreach (var eventItem in HandsUpEventList)
         {
-        <MatExpansionPanel>
-            <MatButton Raised="true" OnClick="@(() => RemoveEvent(eventItem))">Remove Event</MatButton>
-            <MatExpansionPanelSummary>
-                <MatExpansionPanelHeader>@eventItem.Name</MatExpansionPanelHeader>
-            </MatExpansionPanelSummary>
-            <MatExpansionPanelDetails>
-                <MatSubtitle2>At @eventItem.Location on @eventItem.CreatedDate</MatSubtitle2>
-            </MatExpansionPanelDetails>
-        </MatExpansionPanel>
+            <MatExpansionPanel>
+                <MatExpansionPanelSummary>
+                    <MatExpansionPanelHeader>@eventItem.Name</MatExpansionPanelHeader>
+                </MatExpansionPanelSummary>
+                <MatExpansionPanelDetails>
+                    <MatSubtitle2>At @eventItem.Location on @eventItem.CreatedDate</MatSubtitle2>
+                    <MatButton Raised="true" OnClick="@(() => RemoveEvent(eventItem))">Remove Event</MatButton>
+                </MatExpansionPanelDetails>
+            </MatExpansionPanel>
         }
     </MatAccordion>
 }
