@@ -1,0 +1,81 @@
+﻿@page "/events"
+@inject HttpClient Http
+
+<h3>Events</h3>
+
+<MatButton Raised="true" OnClick="OpenDialog">Create Event</MatButton>
+
+@if (HandsUpEventList == null)
+{
+    <h3 class="mat-subtitle1">Loading</h3>
+    <MatProgressBar Indeterminate="true"></MatProgressBar>
+}
+else
+{
+    <MatAccordion>
+        @foreach (var eventItem in HandsUpEventList)
+        {
+            <MatExpansionPanel>
+                <MatExpansionPanelSummary>
+                    <MatExpansionPanelHeader>@eventItem.Name</MatExpansionPanelHeader>
+                </MatExpansionPanelSummary>
+                <MatExpansionPanelDetails>
+                    <MatSubtitle2>At @eventItem.Location on @eventItem.CreatedDate</MatSubtitle2>
+                </MatExpansionPanelDetails>
+            </MatExpansionPanel>
+        }
+    </MatAccordion>
+}
+
+<MatDialog @bind-IsOpen="dialogIsOpen">
+    <EditForm Model="newHandsUpEvent" OnValidSubmit="SaveEvent">
+        <DataAnnotationsValidator />
+        <MatDialogTitle>Create Event</MatDialogTitle>
+        <MatDialogContent>
+            <MatTextField @bind-Value="newHandsUpEvent.Name" Label="Name" />
+            <ValidationMessage For="@(() => newHandsUpEvent.Name)" />
+        </MatDialogContent>
+        <MatDialogContent>
+            <MatTextField @bind-Value="newHandsUpEvent.Location" Label="Location" />
+            <ValidationMessage For="@(() => newHandsUpEvent.Location)" />
+        </MatDialogContent>
+        <MatDialogContent>
+            <MatDatePicker @bind-Value="newHandsUpEvent.CreatedDate" EnableTime="true" Enable24hours="true" Label="Date and time" Minimum="DateTime.Now" />
+        </MatDialogContent>
+
+        <MatDialogContent>
+            <MatTextField @bind-Value="newHandsUpEvent.Description" HelperText="Optional" HelperTextPersistent="true" Label="Description" TextArea="true" FullWidth="true" />
+        </MatDialogContent>
+
+        <MatDialogActions>
+            <MatButton OnClick="@(e => { dialogIsOpen = false; })">Cancel</MatButton>
+            <MatButton Type="submit" Raised="true">Create Event</MatButton>
+        </MatDialogActions>
+    </EditForm>
+</MatDialog>
+
+@code {
+    public IList<HandsUpEvent> HandsUpEventList { get; set; }
+
+    bool dialogIsOpen = false;
+
+    private HandsUpEvent newHandsUpEvent = new HandsUpEvent();
+
+    protected async override Task OnInitializedAsync()
+    {
+        HandsUpEventList = await Http.GetJsonAsync<List<HandsUpEvent>>("events");
+    }
+
+    private void OpenDialog()
+    {
+        newHandsUpEvent = new HandsUpEvent();
+        dialogIsOpen = true;
+    }
+
+    private void SaveEvent()
+    {
+        Http.PostJsonAsync("event", newHandsUpEvent);
+
+        dialogIsOpen = false;
+    }
+}
