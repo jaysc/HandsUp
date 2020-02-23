@@ -1,9 +1,11 @@
 using System.Net.Mime;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -27,6 +29,11 @@ namespace HandsUp.Server
 
             services.AddDbContext<HandsUpContext>(options => options.UseSqlite("Data Source=handsUp.db"));
             services.RegisterBusinessLayer();
+
+            services
+                .AddAuthentication(option => option.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie()
+                .AddTwitter();
 
             services.AddResponseCompression(options =>
             {

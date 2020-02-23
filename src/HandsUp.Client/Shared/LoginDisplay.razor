@@ -1,0 +1,16 @@
+﻿@inject NavigationManager NavigationManager
+
+    <div>
+        <AuthorizeView>
+            <Authorized>
+                <div>
+                    <MatIcon Icon="person" />
+                    <span class="username">@context.User.Identity.Name</span>
+                    <a href="user/signout">Sign out</a>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <a class="sign-in" href="user/signin">Sign in</a>
+            </NotAuthorized>
+        </AuthorizeView>
+    </div>
